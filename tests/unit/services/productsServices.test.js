@@ -59,14 +59,14 @@ describe('Testando a camada service dos products', function () {
         ;
     });
 
-    it('A message de findById é um array', async function () {
+    it('A message de findById é um objeto', async function () {
       const result = await productsService.findByID(2);
 
-      expect(result.message instanceof Array).to.equal(true);
+      expect(result.message instanceof Object).to.equal(true);
     });
 
     it('Retorna uma lista com o product de ID especifico', async function () {
-      const expectedResult = [{ id: 2, name: 'Traje de encolhiment' }];
+      const expectedResult = { id: 2, name: 'Traje de encolhiment' };
 
       const result = await productsService.findByID(2);
 

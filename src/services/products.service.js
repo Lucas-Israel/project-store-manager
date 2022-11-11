@@ -15,7 +15,7 @@ const findByID = async (searchID) => {
 
   if (result.length === 0) return { type: 'PRODUCT_NOT_FOUND', message: result };
 
-  return { type: null, message: result };
+  return { type: null, message: result[0] };
 };
 
 module.exports = {
