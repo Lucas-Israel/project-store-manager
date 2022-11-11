@@ -58,7 +58,7 @@ describe('Testando a camada model de products', function () {
     it('Caso não tenha um produto com ID, retorna uma lista vazia', async function () {
       const expected = [];
 
-      const response = await productsModel.findByID(4);
+      const response = await productsModel.findByID(999);
 
       expect(response).to.deep.equal(expected);
     });
