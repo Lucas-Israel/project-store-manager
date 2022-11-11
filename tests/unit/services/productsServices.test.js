@@ -41,8 +41,17 @@ describe('Testando a camada service dos products', function () {
       expect(result.message).to.be.deep.equal(expectedResult)
     });
 
-    it('Retorna um erro ao procurar um product de ID não existente', async function () {
-      
+    it('Retorna um erro ao procurar um product de ID não existente e uma lista vazia', async function () {
+      const result = await productsService.findByID(999);
+
+      expect(result.type).to.be.equal('PRODUCT_NOT_FOUND');
+      expect(result.message).to.be.deep.equal([])
+    });
+
+    it('Retorna um erro ao passar ID 0 como busca', async function () {
+      const result = await productsService.findByID(0);
+
+      expect(result.type).to.be.equal('INVALID_VALUE')
     });
   });
 });
