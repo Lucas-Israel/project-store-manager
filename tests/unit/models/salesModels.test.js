@@ -14,9 +14,7 @@ describe('Testando a camada model de sales', function () {
 
       const expectedResponse = { insertId: 4};
 
-      const send = 4;
-
-      const result = await salesModel.insert(send);
+      const result = await salesModel.insert();
 
       expect(result).to.be.deep.equal(expectedResponse);
       connection.execute.restore();

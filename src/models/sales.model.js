@@ -1,8 +1,8 @@
 const connection = require('./database/connection');
 
-const insert = async (id) => {
+const insert = async () => {
   const [{ insertId }] = await connection.execute(
-    'INSERT INTO StoreManager.sales(id) VALUE (?)', [id],
+    'INSERT INTO StoreManager.sales(date) VALUE (now())', // pode usar now() direto no value?
   );
 
   return { insertId };
