@@ -117,7 +117,9 @@ describe('Testando a camada service dos products', function () {
     it('Insere com sucesso um product', async function () {
       const expectedResult = { id: 5, name: 'abcde' }
 
-      const result = await productsService.insert(expectedResult.name);
+      const name = 'abcde'
+
+      const result = await productsService.insert(name);
 
       expect(result.message).to.be.deep.equal(expectedResult);
     });
