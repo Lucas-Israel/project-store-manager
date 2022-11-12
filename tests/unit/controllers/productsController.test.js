@@ -56,7 +56,7 @@ describe('Verificando camada controller products', function () {
       expect(res.json).to.have.been.calledWith(expectedResult);
     });
 
-    it('É retornado um erro aonão achar um ID', async function () {
+    it('É retornado um erro ao não achar um ID', async function () {
       sinon
         .stub(productsService, 'findByID')
         .resolves({ type: 'PRODUCT_NOT_FOUND' });
@@ -72,4 +72,22 @@ describe('Verificando camada controller products', function () {
       expect(res.status).to.have.been.calledWith(404);
     });
   });
+
+  describe('Inserindo novos products', function () {
+    it('Retorna um erro 400 ao não ser passado o body.name', async function () {
+      sinon
+        .stub(productsService, 'insert')
+        .resolves({ type: 'INVALID_VALUE' });
+
+      const req = { body: { oi: 'oi' }};
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsService.insert(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+    });
+  })
 });

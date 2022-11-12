@@ -87,4 +87,41 @@ describe('Testando a camada service dos products', function () {
       expect(result.message).to.be.equal('O campo "value" deve ser um numero');
     });
   });
+
+  describe('Testando o productsServices.insert', function () {
+    afterEach(function () {
+      sinon.restore();
+    });
+
+    beforeEach(function () {
+      sinon.stub(productsModel, 'insert').resolves(4);
+    });
+
+    it('Retorna um erro ao não passar o campo name', async function () {
+      const expectedResult = "\"name\" is required"
+      const body = { oi: 'oi' };
+
+      const result = await productsService.insert(body);
+
+      expect(result.message).to.be.equal(expectedResult);
+    });
+
+    it('Retorna um erro ao passar um body.name com menos de 5 caracteres', async function () {
+      const expectedResult = "\"name\" length must be at least 5 characters long";
+      const body = { name: 'abcd'}
+
+      const result = await productsService.insert(body);
+
+      expect(result.message).to.be.equal(expectedResult);
+    });
+
+    it('Insere com sucesso um product', async function () {
+      const expectedResult = 4;
+      const body = {name: 'abcde'}
+
+      const result = await productsService.insert(body);
+
+      expect(result.message).to.be.equal(expectedResult);
+    });
+  });
 });

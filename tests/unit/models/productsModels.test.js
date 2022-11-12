@@ -63,4 +63,21 @@ describe('Testando a camada model de products', function () {
       expect(response).to.deep.equal(expected);
     });
   });
+
+  describe('Testando a rota post', function () {
+    it('Adicionando um item', async function () {
+      const execute = {insertId: 4};
+
+      sinon.stub(connection, 'execute').resolves([execute]);
+
+      const body = { name: 'teste' }
+
+      const expectedResponse = {id: 4, name: 'teste'};
+
+      const result = await productsModel.insert(body);
+
+      expect(result).to.be.deep.equal(expectedResponse);
+      connection.execute.restore();
+    });
+  })
 });
