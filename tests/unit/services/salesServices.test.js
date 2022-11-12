@@ -61,7 +61,6 @@ describe('Testando camada services de sales ', function () {
       const errorType = 'INVALID_VALUE';
 
       const send = [{
-        productId: 1,
         quantity: 1
       }];
       

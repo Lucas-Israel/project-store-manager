@@ -13,10 +13,15 @@ const productNameSchema = Joi.string().min(5).required().messages({
     'string.empty': '"name" cannot be empty',
     'string.base': '"name" must be a string',
     'string.min': '"name" length must be at least {#limit} characters long',
-  });
+});
+
+const objWithIds = Joi.object({
+  productId: Joi.number().min(1).required(),
+  quantity: Joi.number().min(1).required(),
+});
 
 module.exports = {
   idSchema,
-  // productObject,
   productNameSchema,
+  objWithIds,
 };

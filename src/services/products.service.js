@@ -7,7 +7,7 @@ const findAll = async () => {
 };
 
 const findByID = async (searchID) => {
-  const error = validateID(searchID);
+  const error = validateID(searchID, 'id');
 
   if (error.type) return error;
 

@@ -84,7 +84,7 @@ describe('Testando a camada service dos products', function () {
       const result = await productsService.findByID('a');
 
       expect(result.type).to.be.equal('INVALID_VALUE');
-      expect(result.message).to.be.equal('O campo "value" deve ser um numero');
+      expect(result.message).to.be.equal('O campo "id" deve ser um numero');
     });
   });
 
