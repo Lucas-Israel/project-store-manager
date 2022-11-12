@@ -1,0 +1,14 @@
+const sinon = require('sinon');
+const { expect } = require('chai');
+
+const { salesModel } = require('../../../src/models');
+
+const connection = require('../../../src/models/database/connection');
+
+describe('Testando a camada model de sales', function () {
+  describe('Testando a rota post', function () {
+    it('Adicionando um item nas tabelas sales e product_sales', async function () {
+      
+    });
+  });
+});
