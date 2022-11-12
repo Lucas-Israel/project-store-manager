@@ -85,9 +85,28 @@ describe('Verificando camada controller products', function () {
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
 
-      await productsService.insert(req, res);
+      await productsController.insert(req, res);
 
-      expect(res.status).to.have.been.calledWith(404);
+      expect(res.status).to.have.been.calledWith(400);
+    });
+
+    it('Insere corretamente um product novo', async function () {
+      const expectedMessage = { id: 4, name: 'abcde' }
+
+      sinon
+        .stub(productsService, 'insert')
+        .resolves({ type: null, message: {id: 4, name: 'abcde' } });
+
+      const req = { body: { name: 'abcde' } };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsController.insert(req, res);
+
+      expect(res.status).to.have.been.calledWith(201);
+      expect(res.json).to.have.been.calledWith(expectedMessage);
     });
   })
 });

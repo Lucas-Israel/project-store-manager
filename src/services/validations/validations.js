@@ -1,4 +1,4 @@
-const { idSchema, productObject } = require('./schemas');
+const { idSchema, productNameSchema } = require('./schemas');
 
 const validateID = (id) => {
   const { error } = idSchema.validate(id);
@@ -8,7 +8,9 @@ const validateID = (id) => {
 };
 
 const validateProductName = (name) => {
-  const { error } = productObject.validate(name);
+  const { error } = productNameSchema.validate(name);
+
+  if (error.details[0].type === 'string.min') return { type: 'UNP_ENTITY', message: error.message };
 
   if (error) return { type: 'INVALID_VALUE', message: error.message };
 

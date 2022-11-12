@@ -8,18 +8,15 @@ const idSchema = Joi.number().min(1).required()
     'number.min': 'O campo {#label} deve ser maior que 0',
   });
 
-const productNameSchema = Joi.string().min(5).required();
-
-const productObject = Joi.object({
-  name: productNameSchema,
-}).messages({
-  'any.required': '{#label} is required',
-  'string.empty': '{#label} cannot be empty',
-  'string.base': '{#label} must be a string',
-  'string.min': '{#label} length must be at least {#limit} characters long',
-});
+const productNameSchema = Joi.string().min(5).required().messages({
+    'any.required': '"name" is required',
+    'string.empty': '"name" cannot be empty',
+    'string.base': '"name" must be a string',
+    'string.min': '"name" length must be at least {#limit} characters long',
+  });
 
 module.exports = {
   idSchema,
-  productObject,
+  // productObject,
+  productNameSchema,
 };

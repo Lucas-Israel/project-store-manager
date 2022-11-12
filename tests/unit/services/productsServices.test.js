@@ -94,34 +94,32 @@ describe('Testando a camada service dos products', function () {
     });
 
     beforeEach(function () {
-      sinon.stub(productsModel, 'insert').resolves(4);
+      sinon.stub(productsModel, 'insert').resolves({ id: 5, name: 'abcde' });
     });
 
     it('Retorna um erro ao não passar o campo name', async function () {
       const expectedResult = "\"name\" is required"
-      const body = { oi: 'oi' };
 
-      const result = await productsService.insert(body);
+      const result = await productsService.insert();
 
       expect(result.message).to.be.equal(expectedResult);
     });
 
     it('Retorna um erro ao passar um body.name com menos de 5 caracteres', async function () {
       const expectedResult = "\"name\" length must be at least 5 characters long";
-      const body = { name: 'abcd'}
+      const name = 'abc'
 
-      const result = await productsService.insert(body);
+      const result = await productsService.insert(name);
 
       expect(result.message).to.be.equal(expectedResult);
     });
 
     it('Insere com sucesso um product', async function () {
-      const expectedResult = 4;
-      const body = {name: 'abcde'}
+      const expectedResult = { id: 5, name: 'abcde' }
 
-      const result = await productsService.insert(body);
+      const result = await productsService.insert(expectedResult.name);
 
-      expect(result.message).to.be.equal(expectedResult);
+      expect(result.message).to.be.deep.equal(expectedResult);
     });
   });
 });
