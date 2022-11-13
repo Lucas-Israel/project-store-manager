@@ -10,6 +10,13 @@ const insert = async (req, res) => {
   res.status(201).json(message);
 };
 
+const getAll = async (req, res) => {
+  const { message } = await salesService.getAll();
+
+  res.status(200).json(message);
+};
+
 module.exports = {
   insert,
+  getAll,
 };

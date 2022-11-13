@@ -69,4 +69,35 @@ describe('Testando a camada controller sales', function () {
       expect(res.status).to.have.been.calledWith(400);
     });
   });
+
+  describe('Testando a camada controllers getAll', function () {
+    it('Mostra com sucesso os elementos retornado por getAll', async function () {
+      const expectedResult = [{
+        "saleId": 1,
+        "date": "2021-09-09T04:54:29.000Z",
+        "productId": 1,
+        "quantity": 2
+      },
+      {
+        "saleId": 1,
+        "date": "2021-09-09T04:54:54.000Z",
+        "productId": 2,
+        "quantity": 2
+      }];
+
+      sinon
+        .stub(salesService, 'getAll')
+        .resolves({ type: null, message: expectedResult });
+      const req = {};
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await salesController.getAll(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(expectedResult);
+    });
+  })
 })

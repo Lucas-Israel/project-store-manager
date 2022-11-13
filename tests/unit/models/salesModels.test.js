@@ -44,5 +44,24 @@ describe('Testando a camada model de sales', function () {
       expect(result).to.be.deep.equal(executee);
       connection.execute.restore();
     })
+
+    it('Buscando items por ID', async function () {
+      const execute = [{
+        "id": 2,
+        "date": "2022-11-13T20:36:19.000Z",
+        "saleId": 2,
+        "productId": 3,
+        "quantity": 15
+      }]
+
+      sinon.stub(connection, 'execute').resolves([execute])
+
+      const searchId = 2;
+
+      const result = await salesModel.getById(searchId);
+
+      expect(result).to.be.deep.equal(execute);
+      connection.execute.restore();
+    })
   });
 });
