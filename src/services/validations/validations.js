@@ -23,7 +23,9 @@ const validateProductName = (name) => {
 const validatingObj = ({ productId, quantity }) => {
   const { error } = objWithIds.validate({ productId, quantity });
 
-  if (error) return { type: 'INVALID_VALUE', message: error.message };
+  const errorType = error && error.message.includes('required') ? 'INVALID_VALUE' : 'UNP_ENTITY';
+
+  if (error) return { type: errorType, message: error.message };
 
   return { type: null, message: '' };
 };

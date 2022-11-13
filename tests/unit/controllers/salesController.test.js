@@ -52,5 +52,21 @@ describe('Testando a camada controller sales', function () {
       expect(res.status).to.have.been.calledWith(201);
       expect(res.json).to.have.been.calledWith(expectedMessage);
     });
+
+    it('É retornado status 404 e o json apropriado para um erro', async function () {
+      sinon
+        .stub(salesService, 'insert')
+        .resolves({ type: 'INVALID_VALUE' });
+
+      const req = { body: { oi: 'oi' } };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await salesController.insert(req, res);
+
+      expect(res.status).to.have.been.calledWith(400);
+    });
   });
 })
