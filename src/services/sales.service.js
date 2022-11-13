@@ -26,6 +26,13 @@ const insert = async (list) => {
   return { type: null, message: { id: insertId, itemsSold: result } };
 };
 
+const getAll = async () => {
+  const result = await salesModel.getAll();
+
+  return { type: null, message: result };
+};
+
 module.exports = {
   insert,
+  getAll,
 };

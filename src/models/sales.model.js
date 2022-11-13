@@ -8,6 +8,19 @@ const insert = async () => {
   return { insertId };
 };
 
+const getAll = async () => {
+  const [result] = await connection.execute(
+    `SELECT a.id, a.date, b.*
+    FROM StoreManager.sales as a
+    INNER JOIN StoreManager.sales_products as b
+    ON a.id = b.sale_id
+    `,
+  );
+
+  return result;
+};
+
 module.exports = {
   insert,
+  getAll,
 };

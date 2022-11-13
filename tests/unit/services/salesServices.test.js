@@ -90,4 +90,46 @@ describe('Testando camada services de sales ', function () {
       expect(result.type).to.be.equal(errorType);
     });
   });
+
+  describe('Testando salesService.getAll', function () {
+    afterEach(function () {
+      sinon.restore();
+    });
+
+    beforeEach(function () {
+      const execute = [{
+        "saleId": 1,
+        "date": "2021-09-09T04:54:29.000Z",
+        "productId": 1,
+        "quantity": 2
+      },
+      {
+        "saleId": 1,
+        "date": "2021-09-09T04:54:54.000Z",
+        "productId": 2,
+        "quantity": 2
+        }];
+  
+      sinon.stub(salesModel, 'getAll').resolves(execute)
+    });
+
+    it('Retorna todos os elementos de getAll', async function () {
+      const result = await salesService.getAll();
+
+      const expectedResult = [{
+        "saleId": 1,
+        "date": "2021-09-09T04:54:29.000Z",
+        "productId": 1,
+        "quantity": 2
+      },
+      {
+        "saleId": 1,
+        "date": "2021-09-09T04:54:54.000Z",
+        "productId": 2,
+        "quantity": 2
+      }];
+
+      expect(result.message).to.be.deep.equal(expectedResult);
+    });
+  });
 });
