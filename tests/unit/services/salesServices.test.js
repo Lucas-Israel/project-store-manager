@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 
-const { salesModel, salesProductsModel } = require('../../../src/models');
+const { salesModel, salesProductsModel, productsModel } = require('../../../src/models');
 
 const { salesService } = require('../../../src/services');
 
@@ -26,6 +26,8 @@ describe('Testando camada services de sales ', function () {
         });
     });
     it('Insere com sucesso um ID na tabela sales.', async function () {
+      sinon.stub(productsModel, 'findByID').resolves([{ id: 1, name: 'Martelo de Thor' },
+        { id: 2, name: 'Traje de encolhimento' }]);
       const send = [
         {
           productId: 1,
@@ -57,6 +59,7 @@ describe('Testando camada services de sales ', function () {
     });
 
     it('Causa um erro ao tentar fazer operações sem o campo productId', async function () {
+      sinon.stub(productsModel, 'findByID').resolves([]);
       const errorMessage = "\"productId\" is required";
       const errorType = 'INVALID_VALUE';
 
@@ -64,6 +67,23 @@ describe('Testando camada services de sales ', function () {
         quantity: 1
       }];
       
+      const result = await salesService.insert(send);
+
+      expect(result.message).to.be.equal(errorMessage);
+      expect(result.type).to.be.equal(errorType);
+    });
+
+    it('Causa um erro ao tentar fazer operações com um productId não existente no banco', async function () {
+      sinon.stub(productsModel, 'findByID').resolves([]);
+      
+      const errorMessage = "Product not found";
+      const errorType = 'PRODUCT_NOT_FOUND';
+
+      const send = [{
+        productId: 999999,
+        quantity: 1
+      }];
+
       const result = await salesService.insert(send);
 
       expect(result.message).to.be.equal(errorMessage);

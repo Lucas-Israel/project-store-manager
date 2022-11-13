@@ -1,13 +1,8 @@
-const { salesModel } = require('../models/index');
-const { salesProductsModel } = require('../models/index');
-const { validatingObj } = require('./validations/validations');
+const { salesModel, salesProductsModel } = require('../models/index');
+const { validatingObj, validatingProductIdExistense } = require('./validations/validations');
 
 const insert = async (list) => {
   const { insertId } = await salesModel.insert();
-
-  // const error = validateID(insertId);
-
-  // console.log(`Log do erro de insertId ${error.message}`);
 
   const errorMap = list.map((item) => validatingObj(item));
 
@@ -18,15 +13,17 @@ const insert = async (list) => {
     }; 
   }
 
+  const listOfId = await Promise
+    .all(list.map(({ productId }) => validatingProductIdExistense(productId)));
+  
+  const boolOfListOfId = listOfId.some((item) => item.type);
+
+  if (boolOfListOfId) return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
+
   const result = await Promise.all(list
     .map(({ productId, quantity }) => salesProductsModel.insert(insertId, productId, quantity)));
 
-  const newResult = {
-    id: insertId,
-    itemsSold: result,
-  };
-
-  return { type: null, message: newResult };
+  return { type: null, message: { id: insertId, itemsSold: result } };
 };
 
 module.exports = {

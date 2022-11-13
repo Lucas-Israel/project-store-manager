@@ -1,4 +1,5 @@
 const { idSchema, productNameSchema, objWithIds } = require('./schemas');
+const { productsModel } = require('../../models/index');
 
 const validateID = (id, label) => {
   const { error } = idSchema.label(label).validate(id);
@@ -27,8 +28,17 @@ const validatingObj = ({ productId, quantity }) => {
   return { type: null, message: '' };
 };
 
+const validatingProductIdExistense = async (pId) => {
+  const result = await productsModel.findByID(pId);
+
+  if (result.length === 0) return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' }; 
+
+  return { type: null, messge: '' };
+};
+
 module.exports = {
   validateID,
   validateProductName,
   validatingObj,
+  validatingProductIdExistense,
 };
