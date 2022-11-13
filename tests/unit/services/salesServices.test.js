@@ -162,11 +162,26 @@ describe('Testando camada services de sales ', function () {
     });
 
     it('Retorna um erro ao tentar procurar um ID que não exista', async function () {
-      const expectedResult = 'abc'
+      sinon.restore();
+
+      const execute = [];
+
+      sinon.stub(salesModel, 'getById').resolves(execute)
+
+      const expectedResult = []
 
       const result = await salesService.getById(999999999);
 
       expect(result.type).to.be.equal('SALE_NOT_FOUND');
+      expect(result.message).to.be.deep.equal(expectedResult);
+    });
+
+    it('Retorna um erro ao tentar procurar sem passar ID', async function () {
+      const expectedResult = 'O campo "id" é obrigatório'
+
+      const result = await salesService.getById();
+
+      expect(result.type).to.be.equal('INVALID_VALUE');
       expect(result.message).to.be.equal(expectedResult);
     });
   });

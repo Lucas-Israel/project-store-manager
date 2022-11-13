@@ -1,5 +1,6 @@
 const { salesModel, salesProductsModel } = require('../models/index');
-const { validatingObj, validatingProductIdExistense } = require('./validations/validations');
+const { validatingObj, validatingProductIdExistense,
+  validateID } = require('./validations/validations');
 
 const insert = async (list) => {
   const errorMap = list.map((item) => validatingObj(item));
@@ -35,6 +36,14 @@ const getAll = async () => {
 };
 
 const getById = async (sId) => {
+  const error = validateID(sId, 'id');
+
+  if (error.type) return error;
+
+  const result0 = await salesModel.getById(sId);
+
+  if (result0.length === 0) return { type: 'SALE_NOT_FOUND', message: result0 };
+
   const result = await salesModel.getById(sId);
 
   const message = result.map(({ saleId, id, ...others }) => others);
