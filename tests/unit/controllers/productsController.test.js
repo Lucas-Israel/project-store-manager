@@ -9,7 +9,7 @@ const { expect } = chai;
 
 chai.use(sinonChai);
 
-describe('Verificando camada controller products', function () {
+describe('Testando a camada controller products', function () {
   afterEach(sinon.restore);
   describe('Listando todos os products', function () {
     it('É retornado status 200 e json correto', async function () {
