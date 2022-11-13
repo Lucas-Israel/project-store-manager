@@ -125,5 +125,23 @@ describe('Testando a camada controller sales', function () {
       expect(res.status).to.have.been.calledWith(200);
       expect(res.json).to.have.been.calledWith(expectedResult);
     });
+
+    it('Retorna um erro ao procurar um elemento com ID não existente', async function () {
+      const expectedResult = { message: [] };
+
+      sinon
+        .stub(salesService, 'getById')
+        .resolves({ type: 'SALE_NOT_FOUND', message: [] });
+      const req = { params: { id: 255 } };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await salesController.getById(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith(expectedResult);
+    })
   });
 })

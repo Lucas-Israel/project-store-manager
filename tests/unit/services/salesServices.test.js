@@ -168,7 +168,7 @@ describe('Testando camada services de sales ', function () {
 
       sinon.stub(salesModel, 'getById').resolves(execute)
 
-      const expectedResult = []
+      const expectedResult = 'Sale not found'
 
       const result = await salesService.getById(999999999);
 
