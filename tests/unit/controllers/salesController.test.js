@@ -99,5 +99,31 @@ describe('Testando a camada controller sales', function () {
       expect(res.status).to.have.been.calledWith(200);
       expect(res.json).to.have.been.calledWith(expectedResult);
     });
-  })
+  });
+
+  describe('Testando a camada controller getById', function () {
+    it('Mostra com sucesso o elemento retornado por getById', async function () {
+      const expectedResult = [{
+        "id": 2,
+        "date": "2022-11-13T20:36:19.000Z",
+        "saleId": 2,
+        "productId": 3,
+        "quantity": 15
+      }];
+
+      sinon
+        .stub(salesService, 'getById')
+        .resolves({ type: null, message: expectedResult });
+      const req = { params: { id: 2}};
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await salesController.getById(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(expectedResult);
+    });
+  });
 })

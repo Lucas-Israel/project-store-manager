@@ -16,7 +16,15 @@ const getAll = async (req, res) => {
   res.status(200).json(message);
 };
 
+const getById = async (req, res) => {
+  const { id } = req.params;
+  const { message } = await salesService.getById(id);
+  
+  res.status(200).json(message);
+};
+
 module.exports = {
   insert,
   getAll,
+  getById,
 };

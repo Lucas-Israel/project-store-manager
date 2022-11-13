@@ -132,4 +132,42 @@ describe('Testando camada services de sales ', function () {
       expect(result.message).to.be.deep.equal(expectedResult);
     });
   });
+
+  describe('Testando salesService.getById', function () {
+    afterEach(function () {
+      sinon.restore();
+    });
+
+    beforeEach(function () {
+      const execute = [{
+        "id": 2,
+        "date": "2022-11-13T20:36:19.000Z",
+        "saleId": 2,
+        "productId": 3,
+        "quantity": 15
+      }];
+
+      sinon.stub(salesModel, 'getById').resolves(execute)
+    });
+    it('Retorna o elemento correto', async function () {
+      const expectedResult = [{
+        "date": "2022-11-13T20:36:19.000Z",
+        "productId": 3,
+        "quantity": 15
+      }]
+
+      const result = await salesService.getById(2);
+
+      expect(result.message).to.be.deep.equal(expectedResult)
+    });
+
+    it('Retorna um erro ao tentar procurar um ID que não exista', async function () {
+      const expectedResult = 'abc'
+
+      const result = await salesService.getById(999999999);
+
+      expect(result.type).to.be.equal('SALE_NOT_FOUND');
+      expect(result.message).to.be.equal(expectedResult);
+    });
+  });
 });

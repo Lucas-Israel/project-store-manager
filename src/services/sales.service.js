@@ -29,10 +29,21 @@ const insert = async (list) => {
 const getAll = async () => {
   const result = await salesModel.getAll();
 
-  return { type: null, message: result };
+  const message = result.map(({ id, ...others }) => others);
+
+  return { type: null, message };
+};
+
+const getById = async (sId) => {
+  const result = await salesModel.getById(sId);
+
+  const message = result.map(({ saleId, id, ...others }) => others);
+
+  return { type: null, message };
 };
 
 module.exports = {
   insert,
   getAll,
+  getById,
 };
