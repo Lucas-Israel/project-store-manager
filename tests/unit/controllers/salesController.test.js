@@ -144,4 +144,38 @@ describe('Testando a camada controller sales', function () {
       expect(res.json).to.have.been.calledWith(expectedResult);
     })
   });
+
+  describe('Testando a camada controller deleting', function () {
+    it('Retorna um erro ao passar o id de uma sale que não existe', async function () {
+      sinon
+        .stub(salesService, 'deleting')
+        .resolves({ type: 'SALE_NOT_FOUND' });
+
+      const req = { params: { id: '99999' } };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await salesController.deleting(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+
+    });
+
+    it('Deleta um sale com sucesso', async function () {
+      sinon.stub(salesService, 'deleting')
+        .resolves({ type: null, message: { affectedRows: 2 } });
+
+      const req = { params: { id: 2 } };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await salesController.deleting(req, res);
+
+      expect(res.status).to.have.been.calledWith(204);
+    });
+  });
 })

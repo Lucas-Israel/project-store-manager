@@ -10,4 +10,6 @@ router.get('/', salesController.getAll);
 
 router.get('/:id', salesController.getById);
 
+router.delete('/:id', salesController.deleting);
+
 module.exports = router;
