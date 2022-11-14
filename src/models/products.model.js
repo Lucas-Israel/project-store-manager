@@ -12,8 +12,6 @@ const findByID = async (productId) => {
   const [result] = await connection.execute(
     'SELECT * FROM StoreManager.products WHERE id = ?', [productId],
   );
-
-  console.log(result);
   
   return result;
 };
@@ -45,10 +43,21 @@ const deleting = async (pId) => {
   return { affectedRows };
 }; 
 
+const query = async (search) => {
+  const [result] = await connection.execute(
+    `SELECT * 
+    FROM StoreManager.products
+    WHERE name LIKE(?)
+    `, [(`%${search}%`)],
+  );
+  return result;
+};
+
 module.exports = {
   findAll,
   findByID,
   insert,
   update,
   deleting,
+  query,
 };

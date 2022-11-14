@@ -113,4 +113,17 @@ describe('Testando a camada model de products', function () {
       connection.execute.restore();
     })
   });
+
+  describe('Testando a rota de query', function () {
+    it('Encontra um elemento correspondente a query', async function () {
+      const expectedResponse = [{ id: 1, name: 'Martelo de Thor' }, { id: 2, name: 'Traje de encolhimento' }]
+      
+      sinon.stub(connection, 'execute').resolves([expectedResponse])
+
+      const result = await productsModel.query('de');
+
+      expect(result).to.be.deep.equal(expectedResponse);
+      connection.execute.restore();
+    });
+  });
 });
