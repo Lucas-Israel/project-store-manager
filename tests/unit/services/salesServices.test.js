@@ -186,9 +186,35 @@ describe('Testando camada services de sales ', function () {
     });
   });
 
-  // describe('Testando salesServices.deleting', function () {
-  //   it('Retorna um erro ao tentar deletar um sale que não existe', async function () {
-  //     sinon.stub(salesModel, 'getById').resolves({})
-  //   });
-  // });
+  describe('Testando salesServices.deleting', function () {
+    it('Retorna um erro ao tentar deletar um sale que não existe', async function () {
+      sinon.stub(salesModel, 'getById').resolves([]);
+
+      const sId = 9999;
+
+      const result = await salesService.deleting(sId);
+
+      expect(result).to.be.deep.equal({ type: 'SALE_NOT_FOUND', message: 'Sale not found' });
+      sinon.restore();
+    });
+
+    it('Deleta com sucesso', async function () {
+      sinon.stub(salesModel, 'getById').resolves([{
+        "id": 2,
+        "date": "2022-11-13T20:36:19.000Z",
+        "saleId": 2,
+        "productId": 3,
+        "quantity": 15
+      }]);
+
+      sinon.stub(salesModel, 'deleting').resolves({affectedRows: 2})
+
+      const sId = 2;
+
+      const result = await salesService.deleting(sId);
+
+      expect(result).to.be.deep.equal({type: null, message: {affectedRows: 2}})
+      sinon.restore();
+    });
+  });
 });
