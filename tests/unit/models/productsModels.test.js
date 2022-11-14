@@ -100,4 +100,17 @@ describe('Testando a camada model de products', function () {
       connection.execute.restore();
     });
   });
+
+  describe('Testando a rota del', function () {
+    it('Deleta um elemento com sucesso', async function () {
+      const expectedResponse = {affectedRows: 1};
+
+      sinon.stub(connection, 'execute').resolves([expectedResponse]);
+
+      const result = await productsModel.deleting(3);
+
+      expect(result).to.be.deep.equal(expectedResponse);
+      connection.execute.restore();
+    })
+  });
 });

@@ -32,8 +32,6 @@ const insert = async (name) => {
 const update = async (pId, name) => {
   const error = await validatingProductIdExistense(pId);
 
-  console.log(error);
-
   if (error.type) return error;
 
   const result = await productsModel.update(pId, name);
