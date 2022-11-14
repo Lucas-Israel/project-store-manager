@@ -79,7 +79,7 @@ describe('Testando a camada controller products', function () {
         .stub(productsService, 'insert')
         .resolves({ type: 'INVALID_VALUE' });
 
-      const req = { body: { oi: 'oi' }};
+      const req = { body: { oi: 'oi' } };
       const res = {};
 
       res.status = sinon.stub().returns(res);
@@ -95,7 +95,7 @@ describe('Testando a camada controller products', function () {
 
       sinon
         .stub(productsService, 'insert')
-        .resolves({ type: null, message: {id: 4, name: 'abcde' } });
+        .resolves({ type: null, message: { id: 4, name: 'abcde' } });
 
       const req = { body: { name: 'abcde' } };
       const res = {};
@@ -108,5 +108,26 @@ describe('Testando a camada controller products', function () {
       expect(res.status).to.have.been.calledWith(201);
       expect(res.json).to.have.been.calledWith(expectedMessage);
     });
-  })
+  });
+
+  describe('Atualizando products', function () {
+    it('Atualiza com sucesso', async function () {
+      const expectedMessage = { id: 4, name: 'Martelo do Batman' }
+
+      sinon
+        .stub(productsService, 'update')
+        .resolves({ type: null, message: { id: 4, name: 'Martelo do Batman' } });
+
+      const req = { body: { name: 'Martelo do Batman' }, params: { id: 1 } };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsController.update(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(expectedMessage);
+    });
+  });
 });
