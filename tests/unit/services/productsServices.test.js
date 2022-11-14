@@ -131,6 +131,7 @@ describe('Testando a camada service dos products', function () {
     });
 
     it('Atualiza com sucesso', async function () {
+      sinon.stub(productsModel, 'findByID').resolves({ id: 1, message: 'Martelo do Thor' });
       sinon.stub(productsModel, 'update').resolves({ id: 1, name: 'Martelo do Batman' });
 
       const expectedResult = { type: null, message: { id: 1, name: 'Martelo do Batman' } };
