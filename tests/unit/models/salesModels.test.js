@@ -66,7 +66,7 @@ describe('Testando a camada model de sales', function () {
   });
 
   describe('Testando a rota del', function () {
-    it('Deleta um elemento da tabela sales', async function () {
+    it('Deleta um elemento da tabela sales e sales_products', async function () {
       const expectedResult = { affectedRows: 2 };
 
       sinon.stub(connection, 'execute').resolves([expectedResult])
@@ -74,6 +74,30 @@ describe('Testando a camada model de sales', function () {
       const sId = 1;
 
       const result = await salesModel.deleting(sId);
+
+      expect(result).to.be.deep.equal(expectedResult);
+      connection.execute.restore();
+    });
+  });
+
+  describe('Testando a rota put', function () {
+    it('Atualiza um elemento da tabela sales_products', async function () {
+      const expectedResult = {
+        productId: 2,
+        quantity: 100,
+      };
+
+      sinon.stub(connection, 'execute').resolves([expectedResult])
+
+      const pId = expectedResult.productId;
+      const pQant = expectedResult.quantity;
+      const sId = 1;
+      const oldPId = 1;
+      const oldPQant = 5;
+
+      const obj = { what: { pId, pQant }, where: { sId, oldPId, oldPQant } }
+
+      const result = await salesModel.update(obj);
 
       expect(result).to.be.deep.equal(expectedResult);
       connection.execute.restore();

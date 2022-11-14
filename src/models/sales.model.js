@@ -46,9 +46,21 @@ const deleting = async (id) => {
   return { affectedRows };
 };
 
+const update = async ({ what: { pId, pQant }, where: { sId, oldPId, oldPQant } }) => {
+   await connection.execute(
+    `UPDATE StoreManager.sales_products
+    SET product_id = ?, quantity = ?
+    WHERE sale_id = ? and product_id = ? and quantity = ?
+    `, [pId, pQant, sId, oldPId, oldPQant],
+  );
+
+  return { productId: pId, quantity: pQant };
+};
+
 module.exports = {
   insert,
   getAll,
   getById,
   deleting,
+  update,
 };
