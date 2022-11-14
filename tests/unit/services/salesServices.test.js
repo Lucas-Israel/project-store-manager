@@ -185,4 +185,10 @@ describe('Testando camada services de sales ', function () {
       expect(result.message).to.be.equal(expectedResult);
     });
   });
+
+  // describe('Testando salesServices.deleting', function () {
+  //   it('Retorna um erro ao tentar deletar um sale que não existe', async function () {
+  //     sinon.stub(salesModel, 'getById').resolves({})
+  //   });
+  // });
 });
