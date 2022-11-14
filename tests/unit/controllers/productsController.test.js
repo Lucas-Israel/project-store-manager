@@ -129,5 +129,24 @@ describe('Testando a camada controller products', function () {
       expect(res.status).to.have.been.calledWith(200);
       expect(res.json).to.have.been.calledWith(expectedMessage);
     });
+
+    it('Retorna erro ao não receber o body corretamente', async function () {
+      const expectedMessage = "\"name\" is required";
+
+      sinon
+        .stub(productsService, 'update')
+        .resolves({ type: 'INVALID_VALUE', message: expectedMessage });
+
+      const req = { body: { name: 'Martelo do Batman' }, params: { id: 1 } };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsController.update(req, res);
+
+      expect(res.status).to.have.been.calledWith(400);
+      expect(res.json).to.have.been.calledWith({message: expectedMessage});
+    });
   });
 });

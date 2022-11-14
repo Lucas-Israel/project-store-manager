@@ -1,5 +1,6 @@
 const { productsModel } = require('../models/index');
-const { validateID, validateProductName } = require('./validations/validations');
+const { validateID, validateProductName,
+  validatingProductIdExistense } = require('./validations/validations');
 
 const findAll = async () => {
   const result = await productsModel.findAll();
@@ -29,6 +30,12 @@ const insert = async (name) => {
 };
 
 const update = async (pId, name) => {
+  const error = await validatingProductIdExistense(pId);
+
+  console.log(error);
+
+  if (error.type) return error;
+
   const result = await productsModel.update(pId, name);
 
   return { type: null, message: result };

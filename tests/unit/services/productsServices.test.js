@@ -130,15 +130,29 @@ describe('Testando a camada service dos products', function () {
       sinon.restore();
     });
 
-    beforeEach(function () {
-      sinon.stub(productsModel, 'update').resolves({ id: 1, name: 'Martelo do Batman' });
-    });
+    // beforeEach(function () {
+    //   sinon.stub(productsModel, 'update').resolves({ id: 1, name: 'Martelo do Batman' });
+    // });
 
     it('Atualiza com sucesso', async function () {
+      sinon.stub(productsModel, 'update').resolves({ id: 1, name: 'Martelo do Batman' });
 
       const expectedResult = { type: null, message: { id: 1, name: 'Martelo do Batman' } };
 
       const pId = 1;
+
+      const name = "Martelo do Batman";
+
+      const result = await productsService.update(pId, name);
+
+      expect(result).to.be.deep.equal(expectedResult);
+    });
+
+    it('Causa um erro ao tentar atualizar um elemento que não existe', async function () {
+
+      const expectedResult = { type: 'PRODUCT_NOT_FOUND', message: "Product not found" };
+
+      const pId = 9999;
 
       const name = "Martelo do Batman";
 
