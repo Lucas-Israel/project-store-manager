@@ -124,4 +124,27 @@ describe('Testando a camada service dos products', function () {
       expect(result.message).to.be.deep.equal(expectedResult);
     });
   });
+
+  describe('Testando productsServices.update', function () {
+    afterEach(function () {
+      sinon.restore();
+    });
+
+    beforeEach(function () {
+      sinon.stub(productsModel, 'update').resolves({ id: 1, name: 'Martelo do Batman' });
+    });
+
+    it('Atualiza com sucesso', async function () {
+
+      const expectedResult = { type: null, message: { id: 1, name: 'Martelo do Batman' } };
+
+      const pId = 1;
+
+      const name = "Martelo do Batman";
+
+      const result = await productsService.update(pId, name);
+
+      expect(result).to.be.deep.equal(expectedResult);
+    });
+  });
 });
