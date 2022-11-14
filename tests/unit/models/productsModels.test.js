@@ -6,7 +6,7 @@ const { productsModel } = require('../../../src/models/');
 const connection = require('../../../src/models/database/connection');
 
 describe('Testando a camada model de products', function () {
-  describe('Listagem de products', function () {
+  describe('Testando a rota get', function () {
     before(async function () {
       const execute = [
         { id: 1, name: 'Martelo de Thor' },
@@ -80,4 +80,24 @@ describe('Testando a camada model de products', function () {
       connection.execute.restore();
     });
   })
+
+  describe('Testando a rota put', function () {
+    it('Atualiza um elemento com sucesso', async function () {
+      const expectedResponse = {
+        "id": 1,
+        "name": "Martelo do Batman"
+      };
+
+      sinon.stub(connection, 'execute').resolves([expectedResponse]);
+
+      const pId = 1;
+
+      const toUpdate = "Martelo do Batman";
+
+      const result = await productsModel.update(pId, toUpdate);
+
+      expect(result).to.be.deep.equal(expectedResponse);
+      connection.execute.restore();
+    });
+  });
 });
