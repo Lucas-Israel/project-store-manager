@@ -36,10 +36,10 @@ const getById = async (id) => {
 
 const deleting = async (id) => {
   const [{ affectedRows }] = await connection.execute(
-    `DELETE FROM StoreManager.sales as a
-    INNER JOIN StoreManager.sales_products as b
-    ON a.id = b.sale_id
-    WHERE id =?
+    `DELETE StoreManager.sales, StoreManager.sales_products FROM StoreManager.sales
+    INNER JOIN StoreManager.sales_products
+    ON StoreManager.sales.id = StoreManager.sales_products.sale_id
+    WHERE StoreManager.sales.id = ?
     `, [id],
   );
 

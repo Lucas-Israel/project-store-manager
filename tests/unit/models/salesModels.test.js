@@ -67,7 +67,7 @@ describe('Testando a camada model de sales', function () {
 
   describe('Testando a rota del', function () {
     it('Deleta um elemento da tabela sales', async function () {
-      const expectedResult = { affectedRows: 3 };
+      const expectedResult = { affectedRows: 2 };
 
       sinon.stub(connection, 'execute').resolves([expectedResult])
 
