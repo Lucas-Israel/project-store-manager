@@ -130,10 +130,6 @@ describe('Testando a camada service dos products', function () {
       sinon.restore();
     });
 
-    // beforeEach(function () {
-    //   sinon.stub(productsModel, 'update').resolves({ id: 1, name: 'Martelo do Batman' });
-    // });
-
     it('Atualiza com sucesso', async function () {
       sinon.stub(productsModel, 'update').resolves({ id: 1, name: 'Martelo do Batman' });
 
@@ -149,6 +145,7 @@ describe('Testando a camada service dos products', function () {
     });
 
     it('Causa um erro ao tentar atualizar um elemento que não existe', async function () {
+      sinon.stub(productsModel, 'findByID').resolves([]);
 
       const expectedResult = { type: 'PRODUCT_NOT_FOUND', message: "Product not found" };
 
@@ -157,6 +154,36 @@ describe('Testando a camada service dos products', function () {
       const name = "Martelo do Batman";
 
       const result = await productsService.update(pId, name);
+
+      expect(result).to.be.deep.equal(expectedResult);
+    });
+  });
+
+  describe('Testando productsServices.deleting', function () {
+    afterEach(function () {
+      sinon.restore();
+    });
+    it('Causa um erro ao tentar deletar um elemento que não existe', async function () {
+      sinon.stub(productsModel, 'findByID').resolves([]);
+
+      const expectedResult = { type: 'PRODUCT_NOT_FOUND', message: "Product not found" };
+
+      const pId = 9999;
+
+      const result = await productsService.deleting(pId);
+
+      expect(result).to.be.deep.equal(expectedResult);
+    });
+
+    it('Deleta com sucesso um elemento', async function () {
+      sinon.stub(productsModel, 'findByID').resolves({ id: 3, message: 'Escudo do Capitão América'});
+      sinon.stub(productsModel, 'deleting').resolves({ affectedRows: 1 });
+
+      const expectedResult = { type: null, message: { affectedRows: 1 } };
+
+      const pId = 3;
+
+      const result = await productsService.deleting(pId);
 
       expect(result).to.be.deep.equal(expectedResult);
     });
