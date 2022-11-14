@@ -149,4 +149,37 @@ describe('Testando a camada controller products', function () {
       expect(res.json).to.have.been.calledWith({message: expectedMessage});
     });
   });
+
+  describe('Deletando products', function () {
+    it('Retorna um erro ao passar um ID de um produto que não existe', async function () {
+      sinon
+        .stub(productsService, 'deleting')
+        .resolves({ type: 'PRODUCT_NOT_FOUND' });
+
+      const req = { params: { id: '99999' } };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsController.deleting(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+    });
+
+    it('Deleta com sucesso um elemento', async function () {
+      sinon.stub(productsService, 'deleting')
+        .resolves({ type: null, message: { affectedRows: 1 } });
+
+      const req = { params: { id: '3' } };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsController.deleting(req, res);
+
+      expect(res.status).to.have.been.calledWith(204);
+    });
+  });
 });
