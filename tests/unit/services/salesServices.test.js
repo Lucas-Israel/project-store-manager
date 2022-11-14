@@ -3,7 +3,7 @@ const sinon = require('sinon');
 
 const { salesModel, salesProductsModel, productsModel } = require('../../../src/models');
 
-const { salesService } = require('../../../src/services');
+const { salesService, productsService } = require('../../../src/services');
 
 describe('Testando camada services de sales ', function () {
   describe('Testando salesService.insert', function () {
@@ -233,6 +233,8 @@ describe('Testando camada services de sales ', function () {
         "quantity": 15
       }];
 
+      // sinon.stub(productsService, 'findByID').resolves([{ id: 3, name: 'Escudo do Capitão América' }])
+
       sinon.stub(salesModel, 'getById').resolves(execute)
 
       sinon.stub(salesModel, 'update').resolves(expectedResult);
@@ -269,6 +271,36 @@ describe('Testando camada services de sales ', function () {
       const result = await salesService.update(sId, list);
 
       expect(result).to.be.deep.equal({ type: 'SALE_NOT_FOUND', message: 'Sale not found' });
+      sinon.restore();
+    });
+
+    it('Retorna um erro ao tentar atualizar um produto que não existe no database', async function () {
+      const expectedResult = []
+
+      const execute = [{
+        "id": 2,
+        "date": "2022-11-13T20:36:19.000Z",
+        "saleId": 2,
+        "productId": 3,
+        "quantity": 15
+      }];
+
+      sinon.stub(salesService, 'getById').resolves(execute);
+
+      // sinon.stub(productsService, 'findByID').resolves({ type: 'PRODUCT_NOT_FOUND', message: 'Product not found' });
+
+      sinon.stub(salesModel, 'update').resolves(expectedResult);
+
+      const sId = 2;
+
+      const list = [{
+        "productId": 50,
+        "quantity": 15
+      }];
+
+      const result = await salesService.update(sId, list);
+
+      expect(result).to.be.deep.equal({ type: 'PRODUCT_NOT_FOUND', message: 'Product not found' });
       sinon.restore();
     });
   });

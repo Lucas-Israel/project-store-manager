@@ -63,16 +63,23 @@ const deleting = async (sId) => {
 
 const update = async (sId, list) => {
   const sales = await getById(sId);
-
+  
   const salesList = sales.message;
-
+  
   if (salesList === 'Sale not found') return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
+  
+  const productList = await Promise.all(list
+    .map(({ productId }) => validatingProductIdExistense(productId)));
+  
+  const errorCheck = productList.some(({ type }) => type);
+
+  if (errorCheck) return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
 
   const [result] = await Promise.all(list
     .map(({ productId, quantity }, i) => {
       const { productId: oldPId, quantity: oldPQant } = salesList[i];
-    const updateResult = salesModel
-      .update({ what: { pId: productId, pQant: quantity }, where: { sId, oldPId, oldPQant } });
+      const updateResult = salesModel
+        .update({ what: { pId: productId, pQant: quantity }, where: { sId, oldPId, oldPQant } });
     
     return updateResult;
     }));
