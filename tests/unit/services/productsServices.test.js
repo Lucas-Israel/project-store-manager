@@ -189,4 +189,36 @@ describe('Testando a camada service dos products', function () {
       expect(result).to.be.deep.equal(expectedResult);
     });
   });
+
+  describe('Testando productsServices.query', function () {
+    afterEach(function () {
+      sinon.restore();
+    });
+    beforeEach(function () {
+      const send = [{ id: 1, name: 'Martelo de Thor' }, { id: 2, name: 'Traje de encolhimento' }];
+
+      sinon.stub(productsModel, 'query').resolves(send);
+    });
+    it('Retorna uma lista com o que foi procurado', async function () {
+      const message = [{ id: 1, name: 'Martelo de Thor' }, { id: 2, name: 'Traje de encolhimento' }]
+
+      const expectedResult = { type: null, message }
+
+      const result = await productsService.query('de');
+
+      expect(result).to.be.deep.equal(expectedResult);
+    });
+
+    it('Retorna todos os products se nada for passado como parametro', async function () {
+      const message = [{ id: 1, name: 'Martelo de Thor' }, { id: 2, name: 'Traje de encolhimento' }, { id: 3, name: 'Escudo do Capitão América'}]
+      
+      sinon.stub(productsModel, 'findAll').resolves(message);
+
+      const expectedResult = { type: null, message };
+
+      const result = await productsService.query();
+
+      expect(result).to.be.deep.equal(expectedResult);
+    });
+  });
 });

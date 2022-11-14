@@ -49,10 +49,18 @@ const deleting = async (pId) => {
   return { type: null, message: result };
 };
 
+const query = async (search) => {
+  if (!search) return findAll();
+
+  const result = await productsModel.query(search);
+  return { type: null, message: result };
+};
+
 module.exports = {
   findAll,
   findByID,
   insert,
   update,
   deleting,
+  query,
 };
