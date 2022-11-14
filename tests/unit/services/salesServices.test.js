@@ -217,4 +217,28 @@ describe('Testando camada services de sales ', function () {
       sinon.restore();
     });
   });
+
+  describe('Testando salesServices.update', function () {
+    it('Atualiza com sucesso', async function () {
+      const expectedResult = [{
+        productId: 2,
+        quantity: 100,
+      }]
+
+      sinon.stub(salesModel, 'update').resolves(expectedResult);
+
+      const pId = expectedResult[0].productId;
+      const pQant = expectedResult[0].quantity;
+      const sId = 1;
+      const oldPId = 1;
+      const oldPQant = 5;
+
+      const list = [{ what: { pId, pQant }, where: { sId, oldPId, oldPQant } }];
+
+      const result = await salesService.update(list);
+
+      expect(result).to.be.deep.equal({ type: null, message: expectedResult });
+      sinon.restore();
+    });
+  });
 });

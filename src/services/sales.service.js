@@ -61,9 +61,22 @@ const deleting = async (sId) => {
   return { type: null, message: result1 };
 };
 
+const update = async (list) => {
+  const [result] = await Promise.all(list
+    .map(({ what: { pId, pQant }, where: { sId, oldPId, oldPQant } }) => {
+    const updateResult = salesModel
+      .update({ what: { pId, pQant }, where: { sId, oldPId, oldPQant } });
+    
+    return updateResult;
+    }));
+
+  return { type: null, message: result };
+};
+
 module.exports = {
   insert,
   getAll,
   getById,
   deleting,
+  update,
 };
