@@ -225,19 +225,50 @@ describe('Testando camada services de sales ', function () {
         quantity: 100,
       }]
 
+      const execute = [{
+        "id": 2,
+        "date": "2022-11-13T20:36:19.000Z",
+        "saleId": 2,
+        "productId": 3,
+        "quantity": 15
+      }];
+
+      sinon.stub(salesModel, 'getById').resolves(execute)
+
       sinon.stub(salesModel, 'update').resolves(expectedResult);
 
-      const pId = expectedResult[0].productId;
-      const pQant = expectedResult[0].quantity;
-      const sId = 1;
-      const oldPId = 1;
-      const oldPQant = 5;
+      const sId = 2;
 
-      const list = [{ what: { pId, pQant }, where: { sId, oldPId, oldPQant } }];
+      const list = [{
+        "productId": 3,
+        "quantity": 15
+      }];
 
-      const result = await salesService.update(list);
+      const result = await salesService.update(sId, list);
 
       expect(result).to.be.deep.equal({ type: null, message: expectedResult });
+      sinon.restore();
+    });
+
+    it('Retorna um erro ao tentar atualizar uma venda não existente', async function () {
+      const expectedResult = []
+
+      const execute = [];
+
+      sinon.stub(salesService, 'getById').resolves(execute)
+
+      sinon.stub(salesModel, 'update').resolves(expectedResult);
+
+      const sId = 25;
+
+      const list = [{
+        "productId": 3,
+        "quantity": 15
+      }];
+
+      const result = await salesService.update(sId, list);
+
+      expect(result).to.be.deep.equal({ type: 'SALE_NOT_FOUND', message: 'Sale not found' });
       sinon.restore();
     });
   });

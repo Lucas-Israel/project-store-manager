@@ -178,4 +178,57 @@ describe('Testando a camada controller sales', function () {
       expect(res.status).to.have.been.calledWith(204);
     });
   });
+
+  describe('Testando a camada controller update', function () {
+    it('Atualiza um sale com sucesso', async function () {
+      const expectedResult = [{
+        "id": 2,
+        "date": "2022-11-13T20:36:19.000Z",
+        "saleId": 2,
+        "productId": 3,
+        "quantity": 15
+      }];
+
+      sinon
+        .stub(salesService, 'getById')
+        .resolves({ type: null, message: expectedResult });
+
+      sinon.stub(salesService, 'update')
+        .resolves({
+          type: null, message: [{
+            productId: 3,
+            quantity: 30,
+          }]
+        });
+
+      const req = { params: { id: 2 }, body: {productId: 3, quantity: 30} };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await salesController.update(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+    });
+
+    it('Retorna um erro se não tiver o parametro productId no body', async function () {
+      const expectedMessage = "Sale not found";
+
+      sinon
+        .stub(salesService, 'update')
+        .resolves({ type: 'SALE_NOT_FOUND', message: expectedMessage });
+
+      const req = { body: [{ productId: 1, quantity: 1 }], params: { id: 3 } };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await salesController.update(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: expectedMessage });
+    });
+  });
 })
