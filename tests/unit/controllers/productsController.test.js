@@ -182,4 +182,31 @@ describe('Testando a camada controller products', function () {
       expect(res.status).to.have.been.calledWith(204);
     });
   });
+
+  describe('Listando products por query', function () {
+    it('É retornado status 200 e o json apropriado quando não se passa nenhuma query', async function () {
+      const expectedResult = { type: null, message: [
+        { id: 1, name: 'Martelo de Tho' },
+        { id: 2, name: 'Traje de encolhiment' },
+        { id: 3, name: 'Escudo do Capitão Améric' },
+      ]};
+
+      sinon
+        .stub(productsService, 'findAll')
+        .resolves({ type: null, message: expectedResult });
+      
+      sinon.stub(productsService, 'query').resolves({ type: null, message: expectedResult})
+
+      const req = { query: { q: ''} };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsController.query(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(expectedResult);
+    });
+  });
 });
