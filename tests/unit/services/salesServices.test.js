@@ -219,6 +219,9 @@ describe('Testando camada services de sales ', function () {
   });
 
   describe('Testando salesServices.update', function () {
+    afterEach(function () {
+      sinon.restore();
+    });
     it('Atualiza com sucesso', async function () {
       const expectedResult = [{
         productId: 2,
@@ -233,9 +236,9 @@ describe('Testando camada services de sales ', function () {
         "quantity": 15
       }];
 
-      // sinon.stub(productsService, 'findByID').resolves([{ id: 3, name: 'Escudo do Capitão América' }])
+      sinon.stub(productsModel, 'findByID').resolves('Escudo do Capitão América');
 
-      sinon.stub(salesModel, 'getById').resolves(execute)
+      sinon.stub(salesModel, 'getById').resolves(execute);
 
       sinon.stub(salesModel, 'update').resolves(expectedResult);
 
@@ -249,17 +252,12 @@ describe('Testando camada services de sales ', function () {
       const result = await salesService.update(sId, list);
 
       expect(result).to.be.deep.equal({ type: null, message: expectedResult });
-      sinon.restore();
     });
 
     it('Retorna um erro ao tentar atualizar uma venda não existente', async function () {
-      const expectedResult = []
-
       const execute = [];
 
-      sinon.stub(salesService, 'getById').resolves(execute)
-
-      sinon.stub(salesModel, 'update').resolves(expectedResult);
+      sinon.stub(salesModel, 'getById').resolves(execute);
 
       const sId = 25;
 
@@ -271,7 +269,6 @@ describe('Testando camada services de sales ', function () {
       const result = await salesService.update(sId, list);
 
       expect(result).to.be.deep.equal({ type: 'SALE_NOT_FOUND', message: 'Sale not found' });
-      sinon.restore();
     });
 
     it('Retorna um erro ao tentar atualizar um produto que não existe no database', async function () {
@@ -285,9 +282,9 @@ describe('Testando camada services de sales ', function () {
         "quantity": 15
       }];
 
-      sinon.stub(salesService, 'getById').resolves(execute);
+      sinon.stub(salesModel, 'getById').resolves(execute);
 
-      // sinon.stub(productsService, 'findByID').resolves({ type: 'PRODUCT_NOT_FOUND', message: 'Product not found' });
+      sinon.stub(productsModel, 'findByID').resolves([]);
 
       sinon.stub(salesModel, 'update').resolves(expectedResult);
 
@@ -301,7 +298,6 @@ describe('Testando camada services de sales ', function () {
       const result = await salesService.update(sId, list);
 
       expect(result).to.be.deep.equal({ type: 'PRODUCT_NOT_FOUND', message: 'Product not found' });
-      sinon.restore();
     });
   });
 });
