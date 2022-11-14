@@ -64,4 +64,19 @@ describe('Testando a camada model de sales', function () {
       connection.execute.restore();
     })
   });
+
+  describe('Testando a rota del', function () {
+    it('Deleta um elemento da tabela sales', async function () {
+      const expectedResult = { affectedRows: 1 };
+
+      sinon.stub(connection, 'execute').resolves([expectedResult])
+
+      const sId = 2;
+
+      const result = await salesModel.deleting(sId);
+
+      expect(result).to.be.deep.equal(expectedResult);
+      connection.execute.restore();
+    });
+  });
 });
