@@ -10,7 +10,7 @@ const { expect } = chai;
 chai.use(sinonChai);
 
 describe('Testando a camada controller sales', function () {
-  afterEach(sinon.restore);
+  // afterEach(sinon.restore);
   describe('Inserindo elementos na tabela de sales e sales_products', function () {
     it('É retornado status 201 e json correto', async function () {
       const expectedMessage = {
@@ -41,7 +41,8 @@ describe('Testando a camada controller sales', function () {
             productId: 2,
             quantity: 5
           }
-        ] };
+        ]
+      };
       const res = {};
 
       res.status = sinon.stub().returns(res);
@@ -51,6 +52,8 @@ describe('Testando a camada controller sales', function () {
 
       expect(res.status).to.have.been.calledWith(201);
       expect(res.json).to.have.been.calledWith(expectedMessage);
+
+      sinon.restore()
     });
 
     it('É retornado status 404 e o json apropriado para um erro', async function () {
@@ -67,6 +70,8 @@ describe('Testando a camada controller sales', function () {
       await salesController.insert(req, res);
 
       expect(res.status).to.have.been.calledWith(400);
+
+      sinon.restore()
     });
   });
 
@@ -98,6 +103,8 @@ describe('Testando a camada controller sales', function () {
 
       expect(res.status).to.have.been.calledWith(200);
       expect(res.json).to.have.been.calledWith(expectedResult);
+
+      sinon.restore()
     });
   });
 
@@ -114,7 +121,7 @@ describe('Testando a camada controller sales', function () {
       sinon
         .stub(salesService, 'getById')
         .resolves({ type: null, message: expectedResult });
-      const req = { params: { id: 2}};
+      const req = { params: { id: 2 } };
       const res = {};
 
       res.status = sinon.stub().returns(res);
@@ -124,6 +131,8 @@ describe('Testando a camada controller sales', function () {
 
       expect(res.status).to.have.been.calledWith(200);
       expect(res.json).to.have.been.calledWith(expectedResult);
+
+      sinon.restore()
     });
 
     it('Retorna um erro ao procurar um elemento com ID não existente', async function () {
@@ -142,6 +151,8 @@ describe('Testando a camada controller sales', function () {
 
       expect(res.status).to.have.been.calledWith(404);
       expect(res.json).to.have.been.calledWith(expectedResult);
+
+      sinon.restore()
     })
   });
 
@@ -161,6 +172,7 @@ describe('Testando a camada controller sales', function () {
 
       expect(res.status).to.have.been.calledWith(404);
 
+      sinon.restore()
     });
 
     it('Deleta um sale com sucesso', async function () {
@@ -176,6 +188,8 @@ describe('Testando a camada controller sales', function () {
       await salesController.deleting(req, res);
 
       expect(res.status).to.have.been.calledWith(204);
+
+      sinon.restore()
     });
   });
 
@@ -201,7 +215,7 @@ describe('Testando a camada controller sales', function () {
           }]
         });
 
-      const req = { params: { id: 2 }, body: {productId: 3, quantity: 30} };
+      const req = { params: { id: 2 }, body: { productId: 3, quantity: 30 } };
       const res = {};
 
       res.status = sinon.stub().returns(res);
@@ -210,6 +224,8 @@ describe('Testando a camada controller sales', function () {
       await salesController.update(req, res);
 
       expect(res.status).to.have.been.calledWith(200);
+
+      sinon.restore()
     });
 
     it('Retorna um erro se não tiver o parametro productId no body', async function () {
@@ -229,6 +245,8 @@ describe('Testando a camada controller sales', function () {
 
       expect(res.status).to.have.been.calledWith(404);
       expect(res.json).to.have.been.calledWith({ message: expectedMessage });
+
+      sinon.restore()
     });
   });
 })

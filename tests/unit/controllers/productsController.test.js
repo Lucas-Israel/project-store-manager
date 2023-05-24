@@ -10,7 +10,7 @@ const { expect } = chai;
 chai.use(sinonChai);
 
 describe('Testando a camada controller products', function () {
-  afterEach(sinon.restore);
+  // afterEach(sinon.restore);
   describe('Listando todos os products', function () {
     it('É retornado status 200 e json correto', async function () {
       const expectedResult = [
@@ -33,6 +33,8 @@ describe('Testando a camada controller products', function () {
 
       expect(res.status).to.have.been.calledWith(200);
       expect(res.json).to.have.been.calledWith(expectedResult);
+
+      sinon.restore()
     });
   });
 
@@ -54,6 +56,8 @@ describe('Testando a camada controller products', function () {
 
       expect(res.status).to.have.been.calledWith(200);
       expect(res.json).to.have.been.calledWith(expectedResult);
+
+      sinon.restore()
     });
 
     it('É retornado um erro ao não achar um ID', async function () {
@@ -70,6 +74,8 @@ describe('Testando a camada controller products', function () {
       await productsController.findByID(req, res);
 
       expect(res.status).to.have.been.calledWith(404);
+
+      sinon.restore()
     });
   });
 
@@ -88,6 +94,8 @@ describe('Testando a camada controller products', function () {
       await productsController.insert(req, res);
 
       expect(res.status).to.have.been.calledWith(400);
+
+      sinon.restore()
     });
 
     it('Insere corretamente um product novo', async function () {
@@ -107,6 +115,8 @@ describe('Testando a camada controller products', function () {
 
       expect(res.status).to.have.been.calledWith(201);
       expect(res.json).to.have.been.calledWith(expectedMessage);
+
+      sinon.restore()
     });
   });
 
@@ -128,6 +138,8 @@ describe('Testando a camada controller products', function () {
 
       expect(res.status).to.have.been.calledWith(200);
       expect(res.json).to.have.been.calledWith(expectedMessage);
+
+      sinon.restore()
     });
 
     it('Retorna erro ao não receber o body corretamente', async function () {
@@ -146,7 +158,9 @@ describe('Testando a camada controller products', function () {
       await productsController.update(req, res);
 
       expect(res.status).to.have.been.calledWith(400);
-      expect(res.json).to.have.been.calledWith({message: expectedMessage});
+      expect(res.json).to.have.been.calledWith({ message: expectedMessage });
+
+      sinon.restore()
     });
   });
 
@@ -165,6 +179,8 @@ describe('Testando a camada controller products', function () {
       await productsController.deleting(req, res);
 
       expect(res.status).to.have.been.calledWith(404);
+
+      sinon.restore()
     });
 
     it('Deleta com sucesso um elemento', async function () {
@@ -180,24 +196,28 @@ describe('Testando a camada controller products', function () {
       await productsController.deleting(req, res);
 
       expect(res.status).to.have.been.calledWith(204);
+
+      sinon.restore()
     });
   });
 
   describe('Listando products por query', function () {
     it('É retornado status 200 e o json apropriado quando não se passa nenhuma query', async function () {
-      const expectedResult = { type: null, message: [
-        { id: 1, name: 'Martelo de Tho' },
-        { id: 2, name: 'Traje de encolhiment' },
-        { id: 3, name: 'Escudo do Capitão Améric' },
-      ]};
+      const expectedResult = {
+        type: null, message: [
+          { id: 1, name: 'Martelo de Tho' },
+          { id: 2, name: 'Traje de encolhiment' },
+          { id: 3, name: 'Escudo do Capitão Améric' },
+        ]
+      };
 
       sinon
         .stub(productsService, 'findAll')
         .resolves({ type: null, message: expectedResult });
-      
-      sinon.stub(productsService, 'query').resolves({ type: null, message: expectedResult})
 
-      const req = { query: { q: ''} };
+      sinon.stub(productsService, 'query').resolves({ type: null, message: expectedResult })
+
+      const req = { query: { q: '' } };
       const res = {};
 
       res.status = sinon.stub().returns(res);
@@ -207,6 +227,8 @@ describe('Testando a camada controller products', function () {
 
       expect(res.status).to.have.been.calledWith(200);
       expect(res.json).to.have.been.calledWith(expectedResult);
+
+      sinon.restore()
     });
   });
 });
