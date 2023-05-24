@@ -30,14 +30,14 @@ services:
     # na notação porta_de_fora:porta_de_dentro
     ports:
       # Expõe a porta padrão da aplicação: altere aqui caso use outra porta
-      - 3100:3100
+      - 3003:3003
       - 9229:9229
     # Configura as variáveis de ambiente dentro do container
     environment:
       MYSQL_USER: root
       MYSQL_PASSWORD: password
       MYSQL_HOST: db # Nome do service logo abaixo
-      PORT: '3100'
+      PORT: '3003'
       HOST: store_manager
     networks:
       # Conecta esse serviço com a rede que criada
@@ -56,7 +56,7 @@ services:
     ports:
       # Garanta que não haverá conflitos de porta com um banco que esteja
       # rodando localmente
-      - 3316:3316
+      - 3308:3306
     networks:
       # Conecta esse serviço com a rede que criada 
       - store_manager_net
